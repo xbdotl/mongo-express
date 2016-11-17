@@ -124,6 +124,14 @@ You can use the following [environment variables](https://docs.docker.com/refere
     `ME_CONFIG_MONGODB_AUTH_DATABASE` | `db`            | Database name (only needed if `ENABLE_ADMIN` is `"false"`).
     `ME_CONFIG_MONGODB_AUTH_USERNAME` | `admin`         | Database username (only needed if `ENABLE_ADMIN` is `"false"`).
     `ME_CONFIG_MONGODB_AUTH_PASSWORD` | `pass`          | Database password (only needed if `ENABLE_ADMIN` is `"false"`).
+    `ME_CONFIG_MONGODB_SSL`           | `false`         | Use ssl connection (needs to have a mongod server with ssl support).
+    `ME_CONFIG_MONGODB_CHECKSERVERIDENTITY` | `true`          | Ensure we check server identify during SSL, set to false to disable checking.
+    `ME_CONFIG_MONGODB_SSLVALIDATE`   | `true`          | validate mongod server certificate against CA.
+    `ME_CONFIG_MONGODB_SSLCA_PATH`    | `null`          | Mongod server CA file path.
+    `ME_CONFIG_MONGODB_SSLCERT_PATH`  | `null`          | Certificate file path we wish to present (needs to have a mongod server with ssl support, 2.4 or higher).
+    `ME_CONFIG_MONGODB_SSLKEY_PATH`   | `null`          | Certificate private key file path we wish to present (needs to have a mongod server with ssl support, 2.4 or higher).
+    `ME_CONFIG_MONGODB_SSLPASS`       | `null`          | Certificate password (needs to have a mongod server with ssl support, 2.4 or higher).
+    `ME_CONFIG_MONGODB_SERVERNAME`    | `null`          | String containing the server name requested via TLS SNI.
     `ME_CONFIG_SITE_BASEURL`          | `/`             | Set the express baseUrl to ease mounting at a subdirectory. Remember to include a leading and trailing slash.
     `ME_CONFIG_SITE_COOKIESECRET`     | `cookiesecret`  | String used by [cookie-parser middleware](https://www.npmjs.com/package/cookie-parser) to sign cookies.
     `ME_CONFIG_SITE_SESSIONSECRET`    | `sessionsecret` | String used to sign the session ID cookie by [express-session middleware](https://www.npmjs.com/package/express-session).
@@ -132,7 +140,6 @@ You can use the following [environment variables](https://docs.docker.com/refere
     `ME_CONFIG_REQUEST_SIZE`          | `100kb`         | Used to configure maximum mongo update payload size. CRUD operations above this size will fail due to restrictions in [body-parser](https://www.npmjs.com/package/body-parser).
     `ME_CONFIG_OPTIONS_EDITORTHEME`   | `rubyblue`      | Web editor color theme, [more here](http://codemirror.net/demo/theme.html).
     `ME_CONFIG_SITE_SSL_ENABLED`      | `false`         | Enable SSL.
-    `ME_CONFIG_MONGODB_SSLVALIDATE`   | `true`          | Validate mongod server certificate against CA
     `ME_CONFIG_SITE_SSL_CRT_PATH`     | ` `             | SSL certificate file.
     `ME_CONFIG_SITE_SSL_KEY_PATH`     | ` `             | SSL key file.
 

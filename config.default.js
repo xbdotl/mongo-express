@@ -1,7 +1,8 @@
 'use strict';
 
 var mongo;
-var url = require('url');
+const url = require('url')
+  , fs = require('fs')
 
 if (typeof process.env.MONGODB_PORT === 'string') {
   var mongoConnection = url.parse(process.env.MONGODB_PORT);
@@ -30,6 +31,10 @@ if (process.env.VCAP_SERVICES) {
 
 var meConfigMongodbServer = process.env.ME_CONFIG_MONGODB_SERVER ? process.env.ME_CONFIG_MONGODB_SERVER.split(',') : false;
 
+
+/**
+ * http://mongodb.github.io/node-mongodb-native/2.2/api/Server.html
+ */
 module.exports = {
   mongodb: {
     //server: mongodb hostname or IP address
@@ -37,14 +42,35 @@ module.exports = {
     server: (meConfigMongodbServer.length > 1 ? meConfigMongodbServer : meConfigMongodbServer[0]) || mongo.host,
     port:   process.env.ME_CONFIG_MONGODB_PORT    || mongo.port,
 
-    //ssl: connect to the server using secure SSL
+    //ssl: Use ssl connection (needs to have a mongod server with ssl support)
     ssl: process.env.ME_CONFIG_MONGODB_SSL || mongo.ssl,
 
     //sslValidate: validate mongod server certificate against CA
     sslValidate: process.env.ME_CONFIG_MONGODB_SSLVALIDATE || true,
 
-    //sslCA: array of valid CA certificates
-    sslCA:  [],
+    //checkServerIdentity: Ensure we check server identify during SSL, set to false to disable checking.
+    checkServerIdentity: !!process.env.ME_CONFIG_MONGODB_CHECKSERVERIDENTITY || true,
+
+    //sslCA: Array of valid certificates either as Buffers or Strings
+    sslCA:  process.env.ME_CONFIG_MONGODB_SSLCA_PATH ? [
+      fs.readFileSync(process.env.ME_CONFIG_MONGODB_SSLCA_PATH)
+    ] : null,
+
+    //sslCert: String or buffer containing the certificate we wish to present
+    sslCert: process.env.ME_CONFIG_MONGODB_SSLCERT_PATH ? 
+      fs.readFileSync(process.env.ME_CONFIG_MONGODB_SSLCERT_PATH) : 
+      null,
+
+    //sslKey: String or buffer containing the certificate private key we wish to present
+    sslKey: process.env.ME_CONFIG_MONGODB_SSLKEY_PATH ? 
+      fs.readFileSync(process.env.ME_CONFIG_MONGODB_SSLKEY_PATH) : 
+      null,
+
+    //sslPass: String or buffer containing the certificate private key we wish to present
+    sslPass: process.env.ME_CONFIG_MONGODB_SSLPASS || null,
+
+    //servername: String containing the server name requested via TLS SNI
+    servername: process.env.ME_CONFIG_MONGODB_SERVERNAME || null,
 
     //autoReconnect: automatically reconnect if connection is lost
     autoReconnect: true,
